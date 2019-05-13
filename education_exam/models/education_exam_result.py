@@ -382,3 +382,105 @@ class StudentUniform(models.Model):
     _discription="This data to be printed on academic Transcript as student Uniform"
     name=fields.Char('Uniform')
     note=fields.Char("Note")
+
+class EducationExamAverageResults(models.Model):
+    _name = 'education.exam.average.results'
+    _description = "this table contains student Wise exam results"
+    exam_ids = fields.One2many('education.exam')
+    sum_of_exam_ids = fields.Integer("Sum of Exam Ids",compute='calculate_sum_exam_ids')
+    name = fields.Char(string='Name', related="result_id.name")
+    result_id = fields.Many2one("education.exam.results", "result_id",
+                                ondelete="cascade")  # relation to the result table
+    exam_id = fields.Many2one('education.exam', string='Exam', ondelete="cascade")
+    class_id = fields.Many2one('education.class.division', string='Class')
+    level_id = fields.Many2one('education.class', string='Level', compute='_get_level', store='True')
+    # todo here to change class_id to level
+    # todo group for merit list of group
+    group = fields.Many2one('education.division', string='Group', related="class_id.division_id")
+    division_id = fields.Many2one('education.class.division', string='Division')
+    section_id = fields.Many2one('education.class.section', string='Section')
+    roll_no = fields.Integer('Roll', related='student_history.roll_no')
+    student_id = fields.Many2one('education.student', string='Student')
+    student_history = fields.Many2one('education.class.history', "Student History", compute='get_student_history',
+                                      store="True")
+    student_name = fields.Char(string='Student')
+    subject_line = fields.One2many('results.subject.line.new', 'result_id', string='Subjects')
+    general_subject_line = fields.One2many('results.subject.line.new', 'general_for', string='General Subjects')
+    optional_subject_line = fields.One2many('results.subject.line.new', 'optional_for', string='optional Subjects')
+    extra_subject_line = fields.One2many('results.subject.line.new', 'extra_for', string='extra Subjects')
+    academic_year = fields.Many2one('education.academic.year', string='Academic Year')
+    company_id = fields.Many2one('res.company', string='Company',
+                                 default=lambda self: self.env['res.company']._company_default_get())
+    total_pass_mark = fields.Float(string='Total Pass Mark')
+    total_max_mark = fields.Float(string='Total Max Mark')
+    total_max_mark_converted = fields.Float(string='Total Converte Mark')
+
+    general_full_mark = fields.Float("Full Mark")
+    general_full_mark_converted = fields.Float("Converted Full Mark")
+    general_obtained = fields.Integer("General_total")
+    general_obtained_converted = fields.Integer("Converted General total")
+    general_count = fields.Integer("General Subject Count")
+    general_row_count = fields.Integer("General Paper Count")
+    general_fail_count = fields.Integer("Genera Fail")
+    general_gp = fields.Float('general GP')
+    general_gpa = fields.Float("general GPA")
+
+    extra_Full = fields.Integer("extra Full mark")
+    extra_Full_converted = fields.Integer("converted extra Full mark")
+    extra_obtained = fields.Integer("extra Obtained")
+    extra_obtained_converted = fields.Integer("Converted Extra Obtained")
+    extra_count = fields.Integer("extra Count")
+    extra_row_count = fields.Integer("extra Row Count")
+    extra_fail_count = fields.Integer("Extra Fail")
+    extra_gp = fields.Float('Extra GP')
+    extra_gpa = fields.Float("Extra GPA")
+
+    optional_full = fields.Integer("Optional full")
+    optional_full_converted = fields.Integer("Converted Optional full")
+    optional_obtained = fields.Integer("Optional obtained")
+    optional_obtained_converted = fields.Integer("Converted Optional obtained")
+    optional_count = fields.Integer("optional Count")
+    optional_row_count = fields.Integer("optional Row Count")
+    optional_fail_count = fields.Integer("optional Fail Count")
+    optional_gp = fields.Float('Optional LG')
+    optional_gpa = fields.Float("Optional GPA")
+    optional_gpa_above_2 = fields.Float("Optional GPA Above 2")
+    optional_obtained_above_40_perc = fields.Integer("Aditional marks from optionals")
+    optional_obtained_above_40_perc_converted = fields.Integer("Converted Aditional marks from optionals")
+
+    net_obtained = fields.Integer(string='Total Marks Scored')
+    net_obtained_converted = fields.Integer(string='Total Marks Scored')
+    net_pass = fields.Boolean(string='Overall Pass/Fail')
+    net_lg = fields.Char("Letter Grade")
+    net_gp = fields.Float("Net GP")
+    net_gpa = fields.Float("GPA")
+
+    merit_class = fields.Integer("Position In Class")
+    merit_section = fields.Integer("Position In Section")
+    merit_group = fields.Integer("Position In Group")
+
+    # working_days=fields.Integer('Working Days')
+    attendance = fields.Integer('Attendance')
+    percentage_of_attendance = fields.Float("Percentage of Attendance")
+    behavior = fields.Many2one("student.behavior", "Behavior", default='3')
+    sports = fields.Many2one("student.sports", "Sports", default='3')
+    uniform = fields.Many2one("student.uniform", "Uniform", default='3')
+    cultural = fields.Many2one("student.cultural", "Cultural", default='3')
+    state = fields.Selection([('draft', "Draft"), ('done', "Done")], "State", default='draft')
+
+    show_tut = fields.Boolean('Show Tutorial')
+    show_subj = fields.Boolean('Show Subj')
+    show_obj = fields.Boolean('Show Obj')
+    show_prac = fields.Boolean('Show Prac')
+    show_paper = fields.Boolean('Show Papers')
+    result_type_count = fields.Integer("result type Count")
+    generate_date = fields.Date("Generated Date")
+
+    @api.model
+    def calculate_sum_exam_ids(self):
+        for rec in self:
+            number=0
+            for exam in self.exam_ids:
+                number=number+exam.id
+            rec.sum_of_exam_ids=number
+
