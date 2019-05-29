@@ -98,6 +98,7 @@ class EducationExamResultsNew(models.Model):
     @api.model
     def calculate_averages(self):
         if len(self.exam_id)>1:
+            pass
 
     @api.depends('class_id')
     def _get_level(self):
