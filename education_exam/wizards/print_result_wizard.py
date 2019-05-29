@@ -201,7 +201,8 @@ class educationExamResultWizard(models.TransientModel):
                 calculate_average(self.exams)
     @api.multi
     def calculate_average(self,exams):
-    #todo generate average result Here
+        #todo generate average result Here
+        pass
 
 
 
