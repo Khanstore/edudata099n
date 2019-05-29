@@ -192,11 +192,20 @@ class educationExamResultWizard(models.TransientModel):
                             new_paper.prac_pr=paper.prac_pr
 
                         result_paper_line_list.append(new_paper)
-            self.calculate_subject_rules(subject_list,exam)
-            # self.calculate_result_paper_lines(result_paper_line_list)
-            #self.calculate_result_subject_lines(result_subject_line_list)
-            self.get_result_type_count(exam)
-            self.calculate_subjects_results(exam)
+                self.calculate_subject_rules(subject_list,exam)
+                # self.calculate_result_paper_lines(result_paper_line_list)
+                #self.calculate_result_subject_lines(result_subject_line_list)
+                self.get_result_type_count(exam)
+                self.calculate_subjects_results(exam)
+            if len(self.exams)>1:
+                calculate_average(self.exams)
+    @api.multi
+    def calculate_average(self,exams):
+    #todo generate average result Here
+
+
+
+
     @api.multi
     def calculate_subject_rules(self,subject_list,exam):
         for subjects in subject_list:

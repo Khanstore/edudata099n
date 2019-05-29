@@ -11,7 +11,7 @@ class EducationExamResultsNew(models.Model):
 
     name = fields.Char(string='Name' ,related="result_id.name" )
     result_id=fields.Many2one("education.exam.results","result_id",ondelete="cascade")             #relation to the result table
-    exam_id = fields.Many2one('education.exam', string='Exam',ondelete="cascade")
+    exam_id = fields.Many2many('education.exam',column1='exam_id',column2='result_new_id', string='Exam')
     class_id = fields.Many2one('education.class.division', string='Class')
     level_id=fields.Many2one('education.class',string='Level',compute='_get_level',store='True')
     # todo here to change class_id to level
@@ -32,7 +32,7 @@ class EducationExamResultsNew(models.Model):
                                  default=lambda self: self.env['res.company']._company_default_get())
     total_pass_mark = fields.Float(string='Total Pass Mark')
     total_max_mark = fields.Float(string='Total Max Mark')
-    total_max_mark_converted = fields.Float(string='Total Converte Mark')
+    total_max_mark_converted = fields.Float(string='Total Converted Mark')
 
     general_full_mark=fields.Float("Full Mark")
     general_full_mark_converted=fields.Float("Converted Full Mark")
@@ -94,6 +94,10 @@ class EducationExamResultsNew(models.Model):
     show_paper=fields.Boolean('Show Papers')
     result_type_count=fields.Integer("result type Count")
     generate_date=fields.Date("Generated Date")
+
+    @api.model
+    def calculate_averages(self):
+        if len(self.exam_id)>1:
 
     @api.depends('class_id')
     def _get_level(self):

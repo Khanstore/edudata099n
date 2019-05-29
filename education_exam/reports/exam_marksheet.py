@@ -94,6 +94,7 @@ class exam_marksheet(models.AbstractModel):
         elif object.level:
             section=self.env['education.class.division'].search([('class_id','=',object.level.id),('academic_year_id','=',object.academic_year.id)])
             return section
+
     def get_students(self,objects):
         sections=self.get_sections(objects)
         student=[]
@@ -115,8 +116,6 @@ class exam_marksheet(models.AbstractModel):
     def get_students_in_section(self,section):
         student_list = self.env['education.class.history'].search([('class_id.id', '=', section.id)])
         return student_list
-
-
 
     def get_students_in_student_section(self,student):
         student_list = self.env['education.class.history'].search([('class_id.id', '=', student.section.id)])
@@ -169,13 +168,16 @@ class exam_marksheet(models.AbstractModel):
 
 
         return is_optional
+
     def get_marks(self,exam,subject,student):
         result_line=self.env['education.exam.results.new'].search([('exam_id','=',exam.id),('student_id','=',student.id)])
         marks=self.env['results.subject.line.new'].search([('subject_id','=',subject.subject_id.id),('result_id','=',result_line.id)])
         return marks
+
     def get_paper(self,result_subject_line_new):
         papers=result_subject_line_new.paper_ids
         return papers
+
     def get_exam_obtained_total(self, exam, student_history, optional, evaluation):
         grand_total = self.env['report.education_exam.report_exam_academic_transcript_s'].get_exam_obtained_total( exam,
                                                                                                                    student_history,
