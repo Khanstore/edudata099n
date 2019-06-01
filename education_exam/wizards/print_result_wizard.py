@@ -115,7 +115,7 @@ class educationExamResultWizard(models.TransientModel):
                     else:   # edit new result data
                         for result_to_edit in new_result:
                             result_to_edit.name= exam.name,
-                            result_to_edit.exam_id=exam.id,
+                            result_to_edit.exam_id=str(exam.id),
                             result_to_edit.student_id= result.student_id.id,
                             result_to_edit.academic_year= exam.academic_year.id,
                             result_to_edit.student_name= result.student_name

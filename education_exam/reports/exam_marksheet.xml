@@ -216,7 +216,7 @@
                 <t t-if="converted_report==1">
                     <th class="rotate" rowspan="2"><div><span>Converted Marks</span></div></th>
                 </t>
-                <th class="rotate" rowspan="2"><div style="width: 22px;">
+                <th class="rotate" rowspan="2"><div style="width: 20px;">
                                  <img src='/education_exam/static/src/img/highest_mark.png' style="width:100%"/>
                              </div></th>
                 <th rowspan="2">LG</th>

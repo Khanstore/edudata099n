@@ -11,7 +11,7 @@ class EducationExamResultsNew(models.Model):
 
     name = fields.Char(string='Name' ,related="result_id.name" )
     result_id=fields.Many2one("education.exam.results","result_id",ondelete="cascade")             #relation to the result table
-    exam_id = fields.Many2one('education.exam', string='Exam',ondelete="cascade")
+    exam_id = fields.Char( string='Exam')
     class_id = fields.Many2one('education.class.division', string='Class')
     level_id=fields.Many2one('education.class',string='Level',compute='_get_level',store='True')
     # todo here to change class_id to level
