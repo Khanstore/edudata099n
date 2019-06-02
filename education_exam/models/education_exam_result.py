@@ -11,7 +11,7 @@ class EducationExamResultsNew(models.Model):
 
     name = fields.Char(string='Name' ,related="result_id.name" )
     result_id=fields.Many2one("education.exam.results","result_id",ondelete="cascade")             #relation to the result table
-    exam_id = fields.Char( string='Exam')
+    exam_id = fields.Many2many('education.exam',column1='exam_id',column2='result_new_id', string='Exam')
     class_id = fields.Many2one('education.class.division', string='Class')
     level_id=fields.Many2one('education.class',string='Level',compute='_get_level',store='True')
     # todo here to change class_id to level
@@ -95,10 +95,16 @@ class EducationExamResultsNew(models.Model):
     result_type_count=fields.Integer("result type Count")
     generate_date=fields.Date("Generated Date")
 
+
     @api.depends('class_id')
     def _get_level(self):
         for rec in self:
             rec.level_id=rec.class_id.class_id
+    @api.depends('exam_id')
+    def get_exams_str(self):
+        for rec in self:
+            val=[exam.id for exam in rec.exam_id]
+            rec.exam_id_str=val.sort()
 
 
     @api.multi

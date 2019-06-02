@@ -32,6 +32,7 @@ class EducationExam(models.Model):
     return_date = fields.Date(string="Date Of Return")
     result_sheet_created = fields.Boolean(string='result sheet Created')
     exam_result = fields.Char(string='Results')
+    result_new_id = fields.Many2many('education.exam.results.new', column2='exam_id', column1='result_new_id', string='Result')
     @api.multi
     @api.onchange('academic_year','exam_type')
     def get_class_domain(self):
