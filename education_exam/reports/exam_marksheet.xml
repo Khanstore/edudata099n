@@ -222,7 +222,10 @@
                 <th rowspan="2">LG</th>
                 <th rowspan="2">GP</th>
                 <t t-if="fourth_subject==1">
-                    <th class="rotate" rowspan="2"><div><span>GPA <br/>(without 4th Sub)</span></div></th>
+                    <th class="rotate" rowspan="2"><div style="width: 40px;">
+                                 <img src='/education_exam/static/src/img/gpa.png' style="width:100%"/>
+                                 <img src='/education_exam/static/src/img/without.png' style="width:100%"/>
+                             </div></th>
                     <th class="rotate" rowspan="2"><div><span>GPA <br/>(with 4th Sub)</span></div></th>
                 </t>
                 <t t-else="">
