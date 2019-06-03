@@ -4,12 +4,36 @@ import pandas as pd
 import os
 import numpy
 
+class EducationExamResultsExamination(models.Model):
+    _name='education.exam.result.exam.line'
+    _description = 'this table contain exam information for results line that is first term, secound term or both average'
+    name=fields.Char('Result For',compute='get_name',store="True" )
+    student_line=fields.Many2many('education.exam.results.new',string="students")
+    exam_ids=fields.Many2many('education.exam',string="exams")
+    exam_count=fields.Integer('No of Exams')
+    pass_rules=fields.One2many('exam.subject.pass.rules',string="True")
+    return_date = fields.Date(string="Date Of Return")
+    academic_year = fields.Many2one('education.academic.year', string='Academic Year')
+    total_working_days = fields.Integer("Total Working Days")
+    state=fields.Selection([('draft','Draft'),('done','Done')],string='State', default='draft')
+    @api.onchange('exam_ids')
+    def get_name(self):
+        for rec in self:
+            rec.exam_count=len(rec.exam_ids)
+            name_str="result For "
+            for exam in rec.exam_ids:
+                name_str=name_str + exam.name
+                if not exam_last:
+                    name_str=name_str +','
+
+
 
 class EducationExamResultsNew(models.Model):
     _name = 'education.exam.results.new'
     _description = "this table contains student Wise exam results"
 
     name = fields.Char(string='Name' ,related="result_id.name" )
+    exam_result_line=fields.Many2many('education.exam.result.exam.line',string='Result Line')
     result_id=fields.Many2one("education.exam.results","result_id",ondelete="cascade")             #relation to the result table
     exam_id = fields.Many2one('education.exam', string='Exam',ondelete="cascade")
     class_id = fields.Many2one('education.class.division', string='Class')

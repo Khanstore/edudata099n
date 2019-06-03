@@ -7,6 +7,7 @@ class ExamSubjectPassRules(models.Model):
     _order = 'sl asc'
     sl=fields.Integer("Serial")
     name = fields.Char(string='Name'  )
+    result_exam_line=fields.Many2one('education.exam.result.exam.line',string='Result Exam Line')
     exam_id = fields.Many2one('education.exam', string='Exam')
     class_id = fields.Many2one('education.class', string='Class')
     subject_id = fields.Many2one('education.subject', string='Subjects')
